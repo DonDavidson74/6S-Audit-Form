@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6S Audit Checklist - Mobile Field App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root{
+      --navy:#172033; --blue:#255C99; --teal:#0E7C7B; --green:#247B3E; --gold:#F4B942;
+      --red:#B3261E; --gray:#64748B; --light:#F5F7FA; --line:#D8DEE9; --white:#fff;
+      --shadow:0 12px 30px rgba(23,32,51,.10); --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial, Helvetica, sans-serif;background:linear-gradient(135deg,#eef5ff,#f7fafc 40%,#eefaf8);color:var(--navy)}
+    header{background:linear-gradient(135deg,var(--navy),#1f3b63);color:white;padding:22px 18px;position:sticky;top:0;z-index:20;box-shadow:var(--shadow)}
+    .header-wrap{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    h1{font-size:1.45rem;margin:0 0 6px 0;letter-spacing:.3px}.sub{margin:0;color:#dbeafe;font-size:.92rem}
+    .badge{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 12px;font-size:.85rem;white-space:nowrap}
+    main{max-width:1180px;margin:18px auto 80px;padding:0 14px}.panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{font-size:.82rem;font-weight:700;color:#334155;display:block;margin-bottom:6px}input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:11px 12px;font-size:1rem;background:#fff;color:var(--navy)}textarea{min-height:88px;resize:vertical}.small{font-size:.78rem;color:var(--gray)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer;background:#e2e8f0;color:#172033;min-height:42px}.btn.primary{background:var(--blue);color:white}.btn.green{background:var(--green);color:white}.btn.gold{background:var(--gold);color:#172033}.btn.red{background:var(--red);color:white}.btn.teal{background:var(--teal);color:white}.btn:hover{filter:brightness(.97)}
+    .summary{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}.score-card{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}.score-card strong{display:block;font-size:1.35rem;margin-top:6px}.score-card.overall{background:#edf7ff;border-color:#b9d8ff}.score-card .name{font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b}
+    .section{border:1px solid var(--line);border-radius:var(--radius);background:white;margin-bottom:16px;overflow:hidden}.section-title{display:flex;justify-content:space-between;gap:12px;align-items:center;background:#f1f5f9;padding:14px 16px;border-bottom:1px solid var(--line)}.section-title h2{font-size:1.05rem;margin:0}.section-score{font-weight:800;color:var(--blue)}
+    .item{padding:14px 16px;border-bottom:1px solid #eef2f7}.item:last-child{border-bottom:0}.item-top{display:grid;grid-template-columns:52px 1fr 150px;gap:12px;align-items:start}.num{background:#eaf2ff;color:#1d4ed8;border-radius:999px;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:800}.desc{line-height:1.35}.item-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.photo-row{margin-top:10px}.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.thumb{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#f8fafc}.thumb img{width:118px;height:90px;object-fit:cover;display:block}.thumb button{position:absolute;right:4px;top:4px;border:0;background:rgba(0,0,0,.65);color:white;border-radius:999px;width:24px;height:24px;cursor:pointer}.required-dot{color:var(--red);font-weight:900}.progressbar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.progressbar span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--green));width:0%}
+    .scoring{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.score-help{border:1px solid var(--line);border-radius:12px;padding:10px;background:#f8fafc}.score-help b{display:block;font-size:1.1rem;color:var(--blue)}
+    .footer-note{color:#64748b;text-align:center;font-size:.8rem;margin:22px 0}.hidden{display:none!important}
+    @media(max-width:900px){.grid,.grid-2,.summary{grid-template-columns:1fr 1fr}.item-top{grid-template-columns:44px 1fr}.item-top .score-box{grid-column:1/-1}.scoring{grid-template-columns:1fr 1fr 1fr}}
+    @media(max-width:560px){header{position:static}.grid,.grid-2,.summary,.item-actions{grid-template-columns:1fr}.toolbar .btn{width:100%}.scoring{grid-template-columns:1fr 1fr}.item{padding:12px}.panel{padding:12px}}
+    @media print{body{background:white}header,.no-print,.toolbar,.photo-inputs,.footer-note{display:none!important}main{margin:0;max-width:none}.panel,.section{box-shadow:none;border-color:#bbb;break-inside:avoid}.item{break-inside:avoid}.section-title{background:#eee!important}.thumb button{display:none}.thumb img{width:140px;height:105px}input,select,textarea{border:0;padding:0;appearance:none}.print-title{display:block!important}.summary{grid-template-columns:repeat(7,1fr)}@page{size:letter;margin:.35in}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-wrap">
+    <div><h1>6S Audit Checklist</h1><p class="sub">Mobile field audit app with scoring, draft save/load, photos, PDF export, and email workflow.</p></div>
+    <div class="badge" id="draftStatus">Draft not saved</div>
+  </div>
+</header>
+<main>
+  <section class="panel no-print">
+    <div class="toolbar">
+      <button class="btn primary" onclick="saveDraft()">Save Draft</button>
+      <button class="btn" onclick="loadDraft()">Load Draft</button>
+      <button class="btn green" onclick="saveAsPdf()">Save as PDF</button>
+      <button class="btn teal" onclick="emailPdf()">Email PDF</button>
+      <button class="btn gold" onclick="exportDraft()">Export Draft File</button>
+      <label class="btn" style="display:inline-flex;align-items:center;gap:8px;margin:0;">Import Draft <input id="importDraftInput" type="file" accept="application/json" style="display:none" onchange="importDraft(event)"></label>
+      <button class="btn red" onclick="clearForm()">Clear Form</button>
+    </div>
+    <p class="small">Tip: “Email PDF” will try to share the PDF directly on supported phones/tablets. If your browser blocks attachments, it will download the PDF and open an email draft so you can attach it manually.</p>
+  </section>
+
+  <section id="report" class="report-shell">
+    <div class="panel print-title hidden"><h1>6S Audit Checklist Report</h1></div>
+    <section class="panel">
+      <div class="grid">
+        <div><label>Date <span class="required-dot">*</span></label><input id="auditDate" type="date"></div>
+        <div><label>Area <span class="required-dot">*</span></label><input id="area" placeholder="e.g., Assembly, Machine Shop"></div>
+        <div><label>Auditor</label><input id="auditor" placeholder="Name"></div>
+        <div><label>Shift</label><select id="shift"><option value="">Select</option><option>1st</option><option>2nd</option><option>3rd</option><option>Weekend</option></select></div>
+      </div>
+      <div class="grid-2" style="margin-top:12px">
+        <div><label>Department / Cell</label><input id="department" placeholder="Department or work cell"></div>
+        <div><label>Audit Status</label><select id="status"><option>Draft</option><option>Complete</option><option>Needs Follow-Up</option></select></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="summary" id="summaryCards"></div>
+      <div style="margin-top:12px" class="progressbar"><span id="completionBar"></span></div>
+      <p class="small" id="completionText">0 of 42 items scored.</p>
+    </section>
+
+    <section class="panel no-print">
+      <label>Scoring Guide</label>
+      <div class="scoring">
+        <div class="score-help"><b>0</b>Zero Effort</div><div class="score-help"><b>1</b>Slight Effort</div><div class="score-help"><b>2</b>Moderate Effort</div><div class="score-help"><b>3</b>Minimal Acceptable Level</div><div class="score-help"><b>4</b>Above Average</div><div class="score-help"><b>5</b>Outstanding Results</div>
+      </div>
+    </section>
+
+    <div id="sections"></div>
+
+    <section class="panel">
+      <label>Observations - put number and finding</label>
+      <textarea id="observations" placeholder="Example: 18 - Missing wrench shadow label at bench 2. Owner: Maintenance. Due: 06/15."></textarea>
+      <div class="photo-row photo-inputs">
+        <label style="margin-top:12px">General Audit Photos</label>
+        <input id="generalPhotosInput" type="file" accept="image/*" capture="environment" multiple onchange="handlePhotos('general', event)">
+      </div>
+      <div id="generalPhotos" class="thumbs"></div>
+    </section>
+
+    <section class="panel">
+      <label>Corrective Actions / Follow-Up</label>
+      <textarea id="followup" placeholder="List follow-up actions, owners, and due dates."></textarea>
+      <div class="grid-2" style="margin-top:12px">
+        <div><label>Reviewed By</label><input id="reviewedBy" placeholder="Supervisor / Manager"></div>
+        <div><label>Review Date</label><input id="reviewDate" type="date"></div>
+      </div>
+    </section>
+  </section>
+  <p class="footer-note">Built as a single-file HTML field tool. Drafts are stored locally in this browser unless exported.</p>
+</main>
+
+<script>
+const CHECKLIST = {"Safety": [[1, "No recordable safety incidents since last audit. 0 if any occurrence"], [2, "Tripping dangers such as electrical cables, scrap steel, pallets, etc. are removed from standing / walking areas"], [3, "Work areas requiring personal protective equipment (PPE) are clearly labeled. All PPE is in reliable condition and is properly stored in an easily accessible and labeled location for use. Verify all observed are wearing PPE"], [4, "E-Stops and local disconnects are highly visible, labeled and located for easy access in case of an emergency, electrical panels unobstructed and easily accessible, floor markings present and in good condition"], [5, "Fire extinguishers and other emergency equipment such as blood spill kits, eyewash stations, first aid kits and defibrillators are prominently displayed, unobstructed, and clean - fire extinguishers fully charged"], [6, "Slippery conditions due to water, oil, paint etc. are not present"], [7, "The workplace layout accommodates easy exit in case of an emergency, exit paths are clear and unobstructed"], [8, "Walkways and vehicle paths are clearly identified and unobstructed. Exits are clearly labeled and unobstructed, exit doors are secure-locked from outside and functioning"], [9, "Equipment safety concerns are clearly identified. Safety guards are painted, in good working condition and provide adequate protection"], [10, "Hazardous environmental conditions are not present. Fumes, mist, flammables properly containerized"]], "Sort": [[11, "Only the required spare parts, raw material, WIP etc. are present at the workstation. Items not required to make the current product are removed from the workplace"], [12, "Only the required tools are present at the workstation. Items not required to make the current product are removed from the workplace"], [13, "Only the required paperwork is present at the workstation. Out-dated or otherwise unnecessary posters, memos, announcement, reports etc. are removed from the workplace"], [14, "Only the required equipment is present at the workstation. All obsolete, broken or unnecessary equipment, shelves, workbenches, carts etc. not required to make the current product removed from the workplace"], [15, "Only the required furniture is present at the workstation. All broken or unnecessary chairs, shelves, lockers, workbenches etc. not required to make the current product are removed from the workplace"]], "Straighten": [[16, "Locations for containers, boxes, bins, WIP, Materials etc. is clearly defined and properly marked"], [17, "Proper Handling/Damage Prevention - Parts are protected using dividers or other protected materials for handling to prevent damage."], [18, "Tools have a designated storage location that is within reach of the operator. The location is properly labeled and tools can easily be identified if absent"], [19, "Paperwork is properly labeled and has a clearly defined and labeled location that is visible to the operators"], [20, "Equipment is clearly identified (numbered, named, color coded, etc.) and placed in a properly identified location"], [21, "Furniture is clearly identified (numbered, named, color coded, etc.) and placed in a properly identified location"], [22, "Personal items and supplies are placed in an identified location"]], "Shine": [[23, "Containers, boxes, bins, etc. used as totes are clean and not cracked or torn, or otherwise damaged. Neat and orderly arrangement"], [24, "Tools are kept clean and in good working order. Where possible, tools are stored in a manner to keep them clean, organized and free from risk of damage"], [25, "Paperwork and labels are not torn and are legible"], [26, "Workstations are kept clean, free from excessive/abnormal dirt"], [27, "Equipment free from dirt, oil leaks, debris, grease, or build up"], [28, "Floors are free from dirt, debris, oil, parts, hardware, empty boxes, skids, packing materials etc., and aisles are clear and clean"], [29, "Schedule times, frequency and responsibilities to clean areas of the workplace. Pre run, post run station cleaning and setup"], [30, "Cleaning equipment and supplies are neatly stored and readily available when needed"]], "Standardize": [[31, "Tools, equipment, paperwork, furniture, etc. are stored neatly in designated areas and are returned immediately after each use"], [32, "Controlled Documents are legible and date and revision numbers are clearly visible."], [33, "Product waste (e.g. shavings, containers, liquids, wrappers, etc.) is consistently and regularly cleaned up and removed from the workplace"], [34, "Preventive measures have been implemented to ensure right-sized inventory, including standard work, standard WIP and visual Kanban systems"], [35, "Previous audit results are posted and clearly visible to the entire team"], [36, "Items for Improvement identified during the previous audit have been completed"], [37, "Performance Scoreboards are up to date, complete data for time of audit"]], "Sustain": [[38, "A member of Management has participated in a 5S activity such as an audit or other activity within the past month"], [39, "All members have been trained in 5S (<20% = 0, 20% - 39%= 1, 40% - 59% = 2, 60% - 79% =3 80% - 99%=4, 100% = 5). Personnel can explain meaning of the 5S's"], [40, "Time and resources are allocated to 5S activities (e.g. designated daily/weekly clean-up time)"], [41, "All operators, team leaders, supervisors, etc. are assigned 5S activities to be completed at least once/month"], [42, "The team took the initiative to make improvements to the workplace that were not identified during the last 5S audit"]]};
+const DRAFT_KEY = 'sixS_audit_checklist_F00360_revA_draft';
+let photoStore = { general: [] };
+
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function safeName(s){ return String(s || '').trim().replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'') || '6S_Audit'; }
+function itemIds(){ return Object.values(CHECKLIST).flat().map(row => String(row[0])); }
+function formIds(){ return ['auditDate','area','auditor','shift','department','status','observations','followup','reviewedBy','reviewDate']; }
+
+function buildApp(){
+  document.getElementById('auditDate').value = todayISO();
+  const sectionsEl = document.getElementById('sections');
+  sectionsEl.innerHTML = '';
+  Object.entries(CHECKLIST).forEach(([section, items]) => {
+    const wrap = document.createElement('section'); wrap.className='section';
+    wrap.innerHTML = `<div class="section-title"><h2>${section} Activity Descriptions</h2><div class="section-score" id="avg_${section}">Avg: —</div></div>`;
+    items.forEach(([num, desc]) => {
+      photoStore[num] = [];
+      const item = document.createElement('div'); item.className='item'; item.dataset.section=section; item.dataset.item=num;
+      item.innerHTML = `
+        <div class="item-top">
+          <div class="num">${num}</div>
+          <div class="desc">${desc}</div>
+          <div class="score-box"><label>Score</label><select id="score_${num}" onchange="updateScores(); autosaveLight();"><option value="">N/A</option><option value="0">0 - Zero Effort</option><option value="1">1 - Slight Effort</option><option value="2">2 - Moderate Effort</option><option value="3">3 - Minimal Acceptable</option><option value="4">4 - Above Average</option><option value="5">5 - Outstanding</option></select></div>
+        </div>
+        <div class="item-actions">
+          <div><label>Finding / Notes</label><textarea id="note_${num}" placeholder="Add finding, condition, owner, due date..." oninput="autosaveLight()"></textarea></div>
+          <div class="photo-inputs"><label>Photo Evidence</label><input id="photoInput_${num}" type="file" accept="image/*" capture="environment" multiple onchange="handlePhotos('${num}', event)"><p class="small">Use camera or choose image file.</p></div>
+        </div>
+        <div id="photos_${num}" class="thumbs"></div>`;
+      wrap.appendChild(item);
+    });
+    sectionsEl.appendChild(wrap);
+  });
+  renderSummary(); updateScores();
+}
+
+function renderSummary(){
+  const box = document.getElementById('summaryCards');
+  const names = Object.keys(CHECKLIST);
+  box.innerHTML = names.map(n => `<div class="score-card"><span class="name">${n}</span><strong id="sum_${n}">—</strong></div>`).join('') + `<div class="score-card overall"><span class="name">Overall</span><strong id="sum_Overall">—</strong></div>`;
+}
+
+function avg(vals){ const nums = vals.map(v=>Number(v)).filter(v=>!Number.isNaN(v)); return nums.length ? (nums.reduce((a,b)=>a+b,0)/nums.length) : null; }
+function updateScores(){
+  let all = [], completed = 0;
+  Object.entries(CHECKLIST).forEach(([section, items]) => {
+    const vals = items.map(([num]) => document.getElementById(`score_${num}`).value).filter(v=>v !== '');
+    completed += vals.length; all.push(...vals);
+    const a = avg(vals); const text = a === null ? '—' : a.toFixed(2);
+    document.getElementById(`sum_${section}`).textContent = text;
+    document.getElementById(`avg_${section}`).textContent = `Avg: ${text}`;
+  });
+  const overall = avg(all); document.getElementById('sum_Overall').textContent = overall === null ? '—' : overall.toFixed(2);
+  const pct = Math.round((completed / itemIds().length) * 100);
+  document.getElementById('completionBar').style.width = `${pct}%`;
+  document.getElementById('completionText').textContent = `${completed} of ${itemIds().length} items scored. ${pct}% complete.`;
+}
+
+function collectData(){
+  const data = { meta:{}, scores:{}, notes:{}, photos:photoStore, savedAt:new Date().toISOString() };
+  formIds().forEach(id => data.meta[id] = document.getElementById(id).value);
+  itemIds().forEach(num => { data.scores[num] = document.getElementById(`score_${num}`).value; data.notes[num] = document.getElementById(`note_${num}`).value; });
+  return data;
+}
+function applyData(data){
+  if(!data) return;
+  formIds().forEach(id => { if(data.meta && data.meta[id] !== undefined) document.getElementById(id).value = data.meta[id]; });
+  itemIds().forEach(num => { if(data.scores) document.getElementById(`score_${num}`).value = data.scores[num] || ''; if(data.notes) document.getElementById(`note_${num}`).value = data.notes[num] || ''; });
+  photoStore = Object.assign({general:[]}, data.photos || {});
+  itemIds().forEach(num => { if(!photoStore[num]) photoStore[num] = []; renderPhotos(num); });
+  renderPhotos('general'); updateScores(); setDraftStatus(data.savedAt ? `Loaded draft saved ${new Date(data.savedAt).toLocaleString()}` : 'Draft loaded');
+}
+function setDraftStatus(text){ document.getElementById('draftStatus').textContent = text; }
+function saveDraft(){ localStorage.setItem(DRAFT_KEY, JSON.stringify(collectData())); setDraftStatus(`Draft saved ${new Date().toLocaleTimeString()}`); }
+function autosaveLight(){ clearTimeout(window.__autoSaveTimer); window.__autoSaveTimer=setTimeout(()=>{ localStorage.setItem(DRAFT_KEY, JSON.stringify(collectData())); setDraftStatus('Autosaved draft'); }, 800); }
+function loadDraft(){ const raw = localStorage.getItem(DRAFT_KEY); if(!raw){ alert('No saved draft found in this browser.'); return; } applyData(JSON.parse(raw)); }
+function clearForm(){ if(!confirm('Clear the form? This will not delete an exported draft file, but it will overwrite this screen.')) return; localStorage.removeItem(DRAFT_KEY); photoStore={general:[]}; buildApp(); formIds().forEach(id=>{ if(id !== 'auditDate' && id !== 'status') document.getElementById(id).value=''; }); document.getElementById('status').value='Draft'; setDraftStatus('Form cleared'); }
+function exportDraft(){ const blob = new Blob([JSON.stringify(collectData(), null, 2)], {type:'application/json'}); downloadBlob(blob, `${pdfBaseName()}_draft.json`); }
+function importDraft(event){ const file = event.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = e => { try { applyData(JSON.parse(e.target.result)); saveDraft(); } catch(err){ alert('Could not import this draft file.'); } }; reader.readAsText(file); event.target.value=''; }
+
+function handlePhotos(key, event){
+  const files = Array.from(event.target.files || []); if(!files.length) return;
+  files.forEach(file => {
+    if(!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => { photoStore[key] = photoStore[key] || []; photoStore[key].push({name:file.name, data:e.target.result, addedAt:new Date().toISOString()}); renderPhotos(key); autosaveLight(); };
+    reader.readAsDataURL(file);
+  });
+  event.target.value='';
+}
+function renderPhotos(key){
+  const el = document.getElementById(key === 'general' ? 'generalPhotos' : `photos_${key}`); if(!el) return;
+  const arr = photoStore[key] || [];
+  el.innerHTML = arr.map((p,i)=>`<div class="thumb"><img src="${p.data}" alt="${p.name || 'audit photo'}"><button class="no-print" onclick="removePhoto('${key}',${i})" title="Remove photo">×</button></div>`).join('');
+}
+function removePhoto(key, index){ (photoStore[key] || []).splice(index,1); renderPhotos(key); autosaveLight(); }
+
+function pdfBaseName(){ return `${safeName(document.getElementById('area').value)}_${document.getElementById('auditDate').value || todayISO()}_6S_Audit`; }
+function prepareForOutput(){ updateScores(); document.getElementById('status').value = document.getElementById('status').value || 'Complete'; }
+function saveAsPdf(){
+  prepareForOutput(); saveDraft();
+  if(window.html2pdf){
+    const opt = { margin: 0.25, filename: `${pdfBaseName()}.pdf`, image: { type: 'jpeg', quality: 0.92 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all','css','legacy'] } };
+    html2pdf().set(opt).from(document.getElementById('report')).save();
+  } else { window.print(); }
+}
+async function makePdfBlob(){
+  prepareForOutput();
+  if(!window.html2pdf) return null;
+  const opt = { margin: 0.25, filename: `${pdfBaseName()}.pdf`, image: { type: 'jpeg', quality: 0.92 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all','css','legacy'] } };
+  return await html2pdf().set(opt).from(document.getElementById('report')).outputPdf('blob');
+}
+async function emailPdf(){
+  saveDraft();
+  const subject = encodeURIComponent(`6S Audit Complete - ${document.getElementById('area').value || 'Area'} - ${document.getElementById('auditDate').value || todayISO()}`);
+  const body = encodeURIComponent(`Attached/available is the completed 6S Audit PDF.\n\nArea: ${document.getElementById('area').value || ''}\nDate: ${document.getElementById('auditDate').value || ''}\nAuditor: ${document.getElementById('auditor').value || ''}\nOverall Score: ${document.getElementById('sum_Overall').textContent}\n`);
+  try{
+    const blob = await makePdfBlob();
+    if(blob){
+      const file = new File([blob], `${pdfBaseName()}.pdf`, {type:'application/pdf'});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({ files:[file], title: decodeURIComponent(subject), text: decodeURIComponent(body) });
+        return;
+      }
+      downloadBlob(blob, `${pdfBaseName()}.pdf`);
+    } else { window.print(); }
+  } catch(e){ console.warn(e); window.print(); }
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+function downloadBlob(blob, filename){ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500); }
+
+window.addEventListener('beforeunload', () => { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectData())); });
+['auditDate','area','auditor','shift','department','status','observations','followup','reviewedBy','reviewDate'].forEach(id => document.addEventListener('input', e => { if(e.target && e.target.id === id) autosaveLight(); }));
+buildApp();
+</script>
+</body>
+</html>
