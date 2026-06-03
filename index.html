@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>6S Audit Checklist - Mobile Field App</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    // Fallback loader for browsers that block or miss the first CDN.
+    window.addEventListener('load', function(){
+      if(!window.html2pdf){
+        var alt = document.createElement('script');
+        alt.src = 'https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js';
+        document.head.appendChild(alt);
+      }
+    });
+  </script>
   <style>
     :root{
       --navy:#172033; --blue:#255C99; --teal:#0E7C7B; --green:#247B3E; --gold:#F4B942;
@@ -25,7 +35,7 @@
     .section{border:1px solid var(--line);border-radius:var(--radius);background:white;margin-bottom:16px;overflow:hidden}.section-title{display:flex;justify-content:space-between;gap:12px;align-items:center;background:#f1f5f9;padding:14px 16px;border-bottom:1px solid var(--line)}.section-title h2{font-size:1.05rem;margin:0}.section-score{font-weight:800;color:var(--blue)}
     .item{padding:14px 16px;border-bottom:1px solid #eef2f7}.item:last-child{border-bottom:0}.item-top{display:grid;grid-template-columns:52px 1fr 150px;gap:12px;align-items:start}.num{background:#eaf2ff;color:#1d4ed8;border-radius:999px;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:800}.desc{line-height:1.35}.item-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.photo-row{margin-top:10px}.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.thumb{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#f8fafc}.thumb img{width:118px;height:90px;object-fit:cover;display:block}.thumb button{position:absolute;right:4px;top:4px;border:0;background:rgba(0,0,0,.65);color:white;border-radius:999px;width:24px;height:24px;cursor:pointer}.required-dot{color:var(--red);font-weight:900}.progressbar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.progressbar span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--green));width:0%}
     .scoring{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.score-help{border:1px solid var(--line);border-radius:12px;padding:10px;background:#f8fafc}.score-help b{display:block;font-size:1.1rem;color:var(--blue)}
-    .footer-note{color:#64748b;text-align:center;font-size:.8rem;margin:22px 0}.hidden{display:none!important}
+    .footer-note{color:#64748b;text-align:center;font-size:.8rem;margin:22px 0}.hidden{display:none!important}.output-message{border:1px solid #bfdbfe;background:#eff6ff;color:#172033;border-radius:14px;padding:12px;margin-top:12px;line-height:1.35}.output-message b{color:#1d4ed8}
     @media(max-width:900px){.grid,.grid-2,.summary{grid-template-columns:1fr 1fr}.item-top{grid-template-columns:44px 1fr}.item-top .score-box{grid-column:1/-1}.scoring{grid-template-columns:1fr 1fr 1fr}}
     @media(max-width:560px){header{position:static}.grid,.grid-2,.summary,.item-actions{grid-template-columns:1fr}.toolbar .btn{width:100%}.scoring{grid-template-columns:1fr 1fr}.item{padding:12px}.panel{padding:12px}}
     @media print{body{background:white}header,.no-print,.toolbar,.photo-inputs,.footer-note{display:none!important}main{margin:0;max-width:none}.panel,.section{box-shadow:none;border-color:#bbb;break-inside:avoid}.item{break-inside:avoid}.section-title{background:#eee!important}.thumb button{display:none}.thumb img{width:140px;height:105px}input,select,textarea{border:0;padding:0;appearance:none}.print-title{display:block!important}.summary{grid-template-columns:repeat(7,1fr)}@page{size:letter;margin:.35in}}
@@ -50,6 +60,7 @@
       <button class="btn red" onclick="clearForm()">Clear Form</button>
     </div>
     <p class="small">Tip: “Email PDF” will try to share the PDF directly on supported phones/tablets. If your browser blocks attachments, it will download the PDF and open an email draft so you can attach it manually.</p>
+    <div id="outputMessage" class="output-message hidden"></div>
   </section>
 
   <section id="report" class="report-shell">
@@ -190,11 +201,37 @@ function handlePhotos(key, event){
   const files = Array.from(event.target.files || []); if(!files.length) return;
   files.forEach(file => {
     if(!file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = e => { photoStore[key] = photoStore[key] || []; photoStore[key].push({name:file.name, data:e.target.result, addedAt:new Date().toISOString()}); renderPhotos(key); autosaveLight(); };
-    reader.readAsDataURL(file);
+    compressImageFile(file, 1200, 0.78).then(dataUrl => {
+      photoStore[key] = photoStore[key] || [];
+      photoStore[key].push({name:file.name, data:dataUrl, addedAt:new Date().toISOString()});
+      renderPhotos(key); autosaveLight();
+    }).catch(() => {
+      const reader = new FileReader();
+      reader.onload = e => { photoStore[key] = photoStore[key] || []; photoStore[key].push({name:file.name, data:e.target.result, addedAt:new Date().toISOString()}); renderPhotos(key); autosaveLight(); };
+      reader.readAsDataURL(file);
+    });
   });
   event.target.value='';
+}
+function compressImageFile(file, maxDim, quality){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = e => { img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      const scale = Math.min(1, maxDim / Math.max(w, h));
+      w = Math.round(w * scale); h = Math.round(h * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 function renderPhotos(key){
   const el = document.getElementById(key === 'general' ? 'generalPhotos' : `photos_${key}`); if(!el) return;
@@ -205,37 +242,69 @@ function removePhoto(key, index){ (photoStore[key] || []).splice(index,1); rende
 
 function pdfBaseName(){ return `${safeName(document.getElementById('area').value)}_${document.getElementById('auditDate').value || todayISO()}_6S_Audit`; }
 function prepareForOutput(){ updateScores(); document.getElementById('status').value = document.getElementById('status').value || 'Complete'; }
-function saveAsPdf(){
+function showOutputMessage(html){ const el = document.getElementById('outputMessage'); if(!el) return; el.innerHTML = html; el.classList.remove('hidden'); el.scrollIntoView({behavior:'smooth', block:'nearest'}); }
+function pdfOptions(){
+  return {
+    margin: 0.28,
+    filename: `${pdfBaseName()}.pdf`,
+    image: { type: 'jpeg', quality: 0.86 },
+    html2canvas: { scale: 1.35, useCORS: true, allowTaint: true, logging: false, scrollY: 0 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait', compress: true },
+    pagebreak: { mode: ['css','legacy'] }
+  };
+}
+async function waitForPdfLibrary(){
+  if(window.html2pdf) return true;
+  await new Promise(resolve => setTimeout(resolve, 1400));
+  return !!window.html2pdf;
+}
+async function saveAsPdf(){
   prepareForOutput(); saveDraft();
-  if(window.html2pdf){
-    const opt = { margin: 0.25, filename: `${pdfBaseName()}.pdf`, image: { type: 'jpeg', quality: 0.92 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all','css','legacy'] } };
-    html2pdf().set(opt).from(document.getElementById('report')).save();
-  } else { window.print(); }
+  showOutputMessage('<b>Working on PDF...</b> If your browser blocks the PDF generator, the app will open the print dialog. Choose <b>Save as PDF</b> as the printer/destination.');
+  try{
+    const ready = await waitForPdfLibrary();
+    if(ready){
+      await html2pdf().set(pdfOptions()).from(document.getElementById('report')).save();
+      showOutputMessage('<b>PDF generated.</b> Check your Downloads folder.');
+      return;
+    }
+  } catch(e){ console.warn('PDF generator failed:', e); }
+  showOutputMessage('<b>PDF generator was blocked or failed.</b> The print dialog is opening now. Choose <b>Save as PDF</b>, then save the file.');
+  setTimeout(() => window.print(), 250);
 }
 async function makePdfBlob(){
   prepareForOutput();
-  if(!window.html2pdf) return null;
-  const opt = { margin: 0.25, filename: `${pdfBaseName()}.pdf`, image: { type: 'jpeg', quality: 0.92 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all','css','legacy'] } };
-  return await html2pdf().set(opt).from(document.getElementById('report')).outputPdf('blob');
+  const ready = await waitForPdfLibrary();
+  if(!ready) return null;
+  return await html2pdf().set(pdfOptions()).from(document.getElementById('report')).outputPdf('blob');
 }
 async function emailPdf(){
   saveDraft();
-  const subject = encodeURIComponent(`6S Audit Complete - ${document.getElementById('area').value || 'Area'} - ${document.getElementById('auditDate').value || todayISO()}`);
-  const body = encodeURIComponent(`Attached/available is the completed 6S Audit PDF.\n\nArea: ${document.getElementById('area').value || ''}\nDate: ${document.getElementById('auditDate').value || ''}\nAuditor: ${document.getElementById('auditor').value || ''}\nOverall Score: ${document.getElementById('sum_Overall').textContent}\n`);
-  try{
-    const blob = await makePdfBlob();
-    if(blob){
-      const file = new File([blob], `${pdfBaseName()}.pdf`, {type:'application/pdf'});
-      if(navigator.canShare && navigator.canShare({files:[file]})){
-        await navigator.share({ files:[file], title: decodeURIComponent(subject), text: decodeURIComponent(body) });
+  const subjectText = `6S Audit Complete - ${document.getElementById('area').value || 'Area'} - ${document.getElementById('auditDate').value || todayISO()}`;
+  const bodyText = `Attached/available is the completed 6S Audit PDF.\n\nArea: ${document.getElementById('area').value || ''}\nDate: ${document.getElementById('auditDate').value || ''}\nAuditor: ${document.getElementById('auditor').value || ''}\nOverall Score: ${document.getElementById('sum_Overall').textContent}\n`;
+  const subject = encodeURIComponent(subjectText);
+  const body = encodeURIComponent(bodyText);
+  showOutputMessage('<b>Preparing email PDF...</b> On phones/tablets this may open the share sheet. On desktop, browsers usually cannot attach files automatically, so the PDF may download first.');
+  let blob = null;
+  try{ blob = await makePdfBlob(); } catch(e){ console.warn('PDF blob failed:', e); }
+  if(blob){
+    const file = new File([blob], `${pdfBaseName()}.pdf`, {type:'application/pdf'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({ files:[file], title: subjectText, text: bodyText });
+        showOutputMessage('<b>Share sheet opened.</b> Choose Mail/Outlook/Gmail and send the PDF from there.');
         return;
-      }
-      downloadBlob(blob, `${pdfBaseName()}.pdf`);
-    } else { window.print(); }
-  } catch(e){ console.warn(e); window.print(); }
-  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      } catch(e){ console.warn('Share cancelled or failed:', e); }
+    }
+    downloadBlob(blob, `${pdfBaseName()}.pdf`);
+    showOutputMessage('<b>PDF downloaded.</b> Your email draft will open next. Attach the downloaded PDF from your Downloads folder if it is not already attached by your device.');
+    setTimeout(() => { window.location.href = `mailto:?subject=${subject}&body=${body}`; }, 700);
+    return;
+  }
+  showOutputMessage('<b>Could not create an automatic PDF file.</b> The print dialog will open first. Save the report as PDF, then attach that saved file to the email draft.');
+  setTimeout(() => { window.print(); window.location.href = `mailto:?subject=${subject}&body=${body}`; }, 500);
 }
-function downloadBlob(blob, filename){ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500); }
+function downloadBlob(blob, filename){ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},1000); }
 
 window.addEventListener('beforeunload', () => { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectData())); });
 ['auditDate','area','auditor','shift','department','status','observations','followup','reviewedBy','reviewDate'].forEach(id => document.addEventListener('input', e => { if(e.target && e.target.id === id) autosaveLight(); }));
