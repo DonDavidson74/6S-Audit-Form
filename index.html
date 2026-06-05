@@ -29,16 +29,16 @@
     .badge{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 12px;font-size:.85rem;white-space:nowrap}
     main{max-width:1180px;margin:18px auto 80px;padding:0 14px}.panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    label{font-size:.82rem;font-weight:700;color:#334155;display:block;margin-bottom:6px}input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:11px 12px;font-size:1rem;background:#fff;color:var(--navy)}textarea{min-height:88px;resize:vertical}.small{font-size:.78rem;color:var(--gray)}
+    label{font-size:.82rem;font-weight:700;color:#334155;display:block;margin-bottom:6px}input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:11px 12px;font-size:1rem;background:#fff;color:var(--navy)}textarea{min-height:88px;resize:vertical;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word;line-height:1.35}.small{font-size:.78rem;color:var(--gray)}
     .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer;background:#e2e8f0;color:#172033;min-height:42px}.btn.primary{background:var(--blue);color:white}.btn.green{background:var(--green);color:white}.btn.gold{background:var(--gold);color:#172033}.btn.red{background:var(--red);color:white}.btn.teal{background:var(--teal);color:white}.btn:hover{filter:brightness(.97)}
     .summary{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}.score-card{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}.score-card strong{display:block;font-size:1.35rem;margin-top:6px}.score-card.overall{background:#edf7ff;border-color:#b9d8ff}.score-card .name{font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b}
     .section{border:1px solid var(--line);border-radius:var(--radius);background:white;margin-bottom:16px;overflow:hidden}.section-title{display:flex;justify-content:space-between;gap:12px;align-items:center;background:#f1f5f9;padding:14px 16px;border-bottom:1px solid var(--line)}.section-title h2{font-size:1.05rem;margin:0}.section-score{font-weight:800;color:var(--blue)}
-    .item{padding:14px 16px;border-bottom:1px solid #eef2f7}.item:last-child{border-bottom:0}.item-top{display:grid;grid-template-columns:52px 1fr 150px;gap:12px;align-items:start}.num{background:#eaf2ff;color:#1d4ed8;border-radius:999px;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:800}.desc{line-height:1.35}.item-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.photo-row{margin-top:10px}.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.thumb{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#f8fafc}.thumb img{width:118px;height:90px;object-fit:cover;display:block}.thumb button{position:absolute;right:4px;top:4px;border:0;background:rgba(0,0,0,.65);color:white;border-radius:999px;width:24px;height:24px;cursor:pointer}.required-dot{color:var(--red);font-weight:900}.progressbar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.progressbar span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--green));width:0%}
+    .item{padding:14px 16px;border-bottom:1px solid #eef2f7;break-inside:avoid;page-break-inside:avoid}.item:last-child{border-bottom:0}.item-top{display:grid;grid-template-columns:52px 1fr 150px;gap:12px;align-items:start}.num{background:#eaf2ff;color:#1d4ed8;border-radius:999px;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:800}.desc{line-height:1.35}.item-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.ca-toolbar{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}.corrective-action-block{margin-top:12px;border:1px solid #cbd5e1;border-left:5px solid var(--teal);border-radius:14px;background:#f8fafc;padding:12px;break-inside:avoid;page-break-inside:avoid}.corrective-action-block h3{font-size:.95rem;margin:0 0 10px 0;color:var(--navy)}.ca-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.ca-grid-wide{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.photo-row{margin-top:10px}.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.thumb{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#f8fafc}.thumb img{width:118px;height:90px;object-fit:cover;display:block}.thumb button{position:absolute;right:4px;top:4px;border:0;background:rgba(0,0,0,.65);color:white;border-radius:999px;width:24px;height:24px;cursor:pointer}.required-dot{color:var(--red);font-weight:900}.progressbar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.progressbar span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--green));width:0%}
     .scoring{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.score-help{border:1px solid var(--line);border-radius:12px;padding:10px;background:#f8fafc}.score-help b{display:block;font-size:1.1rem;color:var(--blue)}
     .footer-note{color:#64748b;text-align:center;font-size:.8rem;margin:22px 0}.hidden{display:none!important}.output-message{border:1px solid #bfdbfe;background:#eff6ff;color:#172033;border-radius:14px;padding:12px;margin-top:12px;line-height:1.35}.output-message b{color:#1d4ed8}
-    @media(max-width:900px){.grid,.grid-2,.summary{grid-template-columns:1fr 1fr}.item-top{grid-template-columns:44px 1fr}.item-top .score-box{grid-column:1/-1}.scoring{grid-template-columns:1fr 1fr 1fr}}
-    @media(max-width:560px){header{position:static}.grid,.grid-2,.summary,.item-actions{grid-template-columns:1fr}.toolbar .btn{width:100%}.scoring{grid-template-columns:1fr 1fr}.item{padding:12px}.panel{padding:12px}}
-    @media print{body{background:white}header,.no-print,.toolbar,.photo-inputs,.footer-note{display:none!important}main{margin:0;max-width:none}.panel,.section{box-shadow:none;border-color:#bbb;break-inside:avoid}.item{break-inside:avoid}.section-title{background:#eee!important}.thumb button{display:none}.thumb img{width:140px;height:105px}input,select,textarea{border:0;padding:0;appearance:none}.print-title{display:block!important}.summary{grid-template-columns:repeat(7,1fr)}@page{size:letter;margin:.35in}}
+    @media(max-width:900px){.grid,.grid-2,.summary{grid-template-columns:1fr 1fr}.item-top{grid-template-columns:44px 1fr}.item-top .score-box{grid-column:1/-1}.scoring{grid-template-columns:1fr 1fr 1fr}.ca-grid{grid-template-columns:1fr 1fr}.ca-grid-wide{grid-template-columns:1fr}}
+    @media(max-width:560px){header{position:static}.grid,.grid-2,.summary,.item-actions,.ca-grid,.ca-grid-wide{grid-template-columns:1fr}.toolbar .btn{width:100%}.ca-toolbar .btn{width:100%}.scoring{grid-template-columns:1fr 1fr}.item{padding:12px}.panel{padding:12px}}
+    @media print{body{background:white}header,.no-print,.toolbar,.photo-inputs,.footer-note{display:none!important}main{margin:0;max-width:none}.panel{box-shadow:none;border-color:#bbb;break-inside:avoid;page-break-inside:avoid}.section{box-shadow:none;border-color:#bbb;break-inside:auto;page-break-inside:auto}.section-title{background:#eee!important;break-after:avoid;page-break-after:avoid}.item,.corrective-action-block{break-inside:avoid;page-break-inside:avoid}.thumb button{display:none}.thumb img{width:140px;height:105px}input,select,textarea{border:0;padding:0;appearance:none;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}.print-title{display:block!important}.summary{grid-template-columns:repeat(7,1fr)}@page{size:letter;margin:.45in}}
   </style>
 </head>
 <body>
@@ -124,6 +124,8 @@ function todayISO(){ return new Date().toISOString().slice(0,10); }
 function safeName(s){ return String(s || '').trim().replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'') || '6S_Audit'; }
 function itemIds(){ return Object.values(CHECKLIST).flat().map(row => String(row[0])); }
 function formIds(){ return ['auditDate','area','auditor','shift','department','status','observations','followup','reviewedBy','reviewDate']; }
+function caFieldNames(){ return ['owner','assigned','due','status','priority','completed','verified','verified_date','action','verify_notes']; }
+function caElementId(field, num){ return `ca_${field}_${num}`; }
 
 function buildApp(){
   document.getElementById('auditDate').value = todayISO();
@@ -142,8 +144,29 @@ function buildApp(){
           <div class="score-box"><label>Score</label><select id="score_${num}" onchange="updateScores(); autosaveLight();"><option value="">N/A</option><option value="0">0 - Zero Effort</option><option value="1">1 - Slight Effort</option><option value="2">2 - Moderate Effort</option><option value="3">3 - Minimal Acceptable</option><option value="4">4 - Above Average</option><option value="5">5 - Outstanding</option></select></div>
         </div>
         <div class="item-actions">
-          <div><label>Finding / Notes</label><textarea id="note_${num}" placeholder="Add finding, condition, owner, due date..." oninput="autosaveLight()"></textarea></div>
+          <div><label>Finding / Notes</label><textarea id="note_${num}" wrap="soft" placeholder="Add finding, condition, owner, due date..." oninput="autosaveLight()"></textarea></div>
           <div class="photo-inputs"><label>Photo Evidence</label><input id="photoInput_${num}" type="file" accept="image/*" capture="environment" multiple onchange="handlePhotos('${num}', event)"><p class="small">Use camera or choose image file.</p></div>
+        </div>
+        <div class="ca-toolbar no-print"><button type="button" class="btn teal" id="caBtn_${num}" onclick="toggleCorrectiveAction('${num}', true)">Add Corrective Action</button></div>
+        <div id="ca_${num}" class="corrective-action-block hidden">
+          <h3>Corrective Action for Item ${num}</h3>
+          <div class="ca-grid">
+            <div><label>Owner</label><input id="ca_owner_${num}" placeholder="Responsible person" oninput="autosaveLight()"></div>
+            <div><label>Date Assigned</label><input id="ca_assigned_${num}" type="date" oninput="autosaveLight()"></div>
+            <div><label>Due Date</label><input id="ca_due_${num}" type="date" oninput="autosaveLight()"></div>
+            <div><label>Status</label><select id="ca_status_${num}" onchange="autosaveLight()"><option>Open</option><option>In Progress</option><option>Complete</option><option>Past Due</option><option>Verified Closed</option></select></div>
+          </div>
+          <div class="ca-grid" style="margin-top:10px">
+            <div><label>Priority</label><select id="ca_priority_${num}" onchange="autosaveLight()"><option>Medium</option><option>Low</option><option>High</option><option>Critical</option></select></div>
+            <div><label>Completed Date</label><input id="ca_completed_${num}" type="date" oninput="autosaveLight()"></div>
+            <div><label>Verified By</label><input id="ca_verified_${num}" placeholder="Reviewer / supervisor" oninput="autosaveLight()"></div>
+            <div><label>Verification Date</label><input id="ca_verified_date_${num}" type="date" oninput="autosaveLight()"></div>
+          </div>
+          <div class="ca-grid-wide">
+            <div><label>Corrective Action Required</label><textarea id="ca_action_${num}" wrap="soft" placeholder="What action will correct the finding?" oninput="autosaveLight()"></textarea></div>
+            <div><label>Verification / Closure Notes</label><textarea id="ca_verify_notes_${num}" wrap="soft" placeholder="How was completion verified?" oninput="autosaveLight()"></textarea></div>
+          </div>
+          <div class="ca-toolbar no-print"><button type="button" class="btn red" onclick="toggleCorrectiveAction('${num}', false)">Remove Corrective Action</button></div>
         </div>
         <div id="photos_${num}" class="thumbs"></div>`;
       wrap.appendChild(item);
@@ -151,6 +174,35 @@ function buildApp(){
     sectionsEl.appendChild(wrap);
   });
   renderSummary(); updateScores();
+}
+
+
+function toggleCorrectiveAction(num, show){
+  const block = document.getElementById(`ca_${num}`);
+  const btn = document.getElementById(`caBtn_${num}`);
+  if(!block) return;
+  block.classList.toggle('hidden', !show);
+  if(btn) btn.textContent = show ? 'Corrective Action Added' : 'Add Corrective Action';
+  if(show){
+    const assigned = document.getElementById(`ca_assigned_${num}`);
+    if(assigned && !assigned.value) assigned.value = todayISO();
+  } else {
+    caFieldNames().forEach(field => {
+      const el = document.getElementById(caElementId(field, num));
+      if(!el) return;
+      if(el.tagName === 'SELECT'){
+        if(field === 'status') el.value = 'Open';
+        if(field === 'priority') el.value = 'Medium';
+      } else {
+        el.value = '';
+      }
+    });
+  }
+  autosaveLight();
+}
+function correctiveActionVisible(num){
+  const block = document.getElementById(`ca_${num}`);
+  return !!block && !block.classList.contains('hidden');
 }
 
 function renderSummary(){
@@ -176,15 +228,34 @@ function updateScores(){
 }
 
 function collectData(){
-  const data = { meta:{}, scores:{}, notes:{}, photos:photoStore, savedAt:new Date().toISOString() };
+  const data = { meta:{}, scores:{}, notes:{}, correctiveActions:{}, photos:photoStore, savedAt:new Date().toISOString() };
   formIds().forEach(id => data.meta[id] = document.getElementById(id).value);
-  itemIds().forEach(num => { data.scores[num] = document.getElementById(`score_${num}`).value; data.notes[num] = document.getElementById(`note_${num}`).value; });
+  itemIds().forEach(num => {
+    data.scores[num] = document.getElementById(`score_${num}`).value;
+    data.notes[num] = document.getElementById(`note_${num}`).value;
+    data.correctiveActions[num] = { visible: correctiveActionVisible(num) };
+    caFieldNames().forEach(field => {
+      const el = document.getElementById(caElementId(field, num));
+      if(el) data.correctiveActions[num][field] = el.value;
+    });
+  });
   return data;
 }
 function applyData(data){
   if(!data) return;
   formIds().forEach(id => { if(data.meta && data.meta[id] !== undefined) document.getElementById(id).value = data.meta[id]; });
-  itemIds().forEach(num => { if(data.scores) document.getElementById(`score_${num}`).value = data.scores[num] || ''; if(data.notes) document.getElementById(`note_${num}`).value = data.notes[num] || ''; });
+  itemIds().forEach(num => {
+    if(data.scores) document.getElementById(`score_${num}`).value = data.scores[num] || '';
+    if(data.notes) document.getElementById(`note_${num}`).value = data.notes[num] || '';
+    const ca = data.correctiveActions && data.correctiveActions[num];
+    toggleCorrectiveAction(num, !!(ca && ca.visible));
+    if(ca){
+      caFieldNames().forEach(field => {
+        const el = document.getElementById(caElementId(field, num));
+        if(el && ca[field] !== undefined) el.value = ca[field] || '';
+      });
+    }
+  });
   photoStore = Object.assign({general:[]}, data.photos || {});
   itemIds().forEach(num => { if(!photoStore[num]) photoStore[num] = []; renderPhotos(num); });
   renderPhotos('general'); updateScores(); setDraftStatus(data.savedAt ? `Loaded draft saved ${new Date(data.savedAt).toLocaleString()}` : 'Draft loaded');
@@ -250,7 +321,7 @@ function pdfOptions(){
     image: { type: 'jpeg', quality: 0.86 },
     html2canvas: { scale: 1.35, useCORS: true, allowTaint: true, logging: false, scrollY: 0 },
     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait', compress: true },
-    pagebreak: { mode: ['css','legacy'] }
+    pagebreak: { mode: ['css','legacy'], avoid: ['.item','.corrective-action-block','.panel'] }
   };
 }
 async function waitForPdfLibrary(){
